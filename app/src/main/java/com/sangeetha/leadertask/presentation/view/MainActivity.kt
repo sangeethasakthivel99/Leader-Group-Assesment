@@ -1,19 +1,18 @@
-package com.sangeetha.leadertask.view
+package com.sangeetha.leadertask.presentation.view
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sangeetha.leadertask.R
 import com.sangeetha.leadertask.data.remote.model.ContactsItem
-import com.sangeetha.leadertask.util.Status
-import com.sangeetha.leadertask.view.adapter.ContactAdapter
-import com.sangeetha.leadertask.view.adapter.ItemClickListener
-import com.sangeetha.leadertask.viewmodel.ContactsViewModel
+import com.sangeetha.leadertask.core.Status
+import com.sangeetha.leadertask.presentation.view.adapter.ContactAdapter
+import com.sangeetha.leadertask.presentation.view.adapter.ItemClickListener
+import com.sangeetha.leadertask.presentation.viewmodel.ContactsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
     }
 
     private fun setupObserver() {
-        viewModel.users.observe(this, Observer {
+        viewModel.users.observe(this, {
             when (it.status) {
                 Status.SUCCESS -> {
                     progressBar.visibility = View.GONE
@@ -68,9 +67,8 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
     }
 
     override fun onItemClicked(contactsItem: ContactsItem) {
-        viewModel.contactDetail.postValue(contactsItem)
         hideViews()
-        attachContactDetailFragment()
+        attachContactDetailFragment(contactsItem)
     }
 
     private fun hideViews() {
@@ -79,10 +77,10 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
         heading.visibility = View.GONE
     }
 
-    private fun attachContactDetailFragment() {
+    private fun attachContactDetailFragment(contactsItem: ContactsItem) {
         container.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction().apply {
-            add(R.id.container, ContactDetailFragment())
+            add(R.id.container, ContactDetailFragment.getNewInstance(contactsItem = contactsItem))
             addToBackStack("ContactDetailFragment")
             commit()
         }
@@ -92,5 +90,10 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
         contactRecyclerView.visibility = View.VISIBLE
         heading.visibility = View.VISIBLE
         container.visibility = View.GONE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.onDestroy()
     }
 }

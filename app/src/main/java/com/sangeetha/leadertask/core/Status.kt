@@ -1,4 +1,4 @@
-package com.sangeetha.leadertask.util
+package com.sangeetha.leadertask.core
 
 enum class Status {
     SUCCESS,

@@ -5,9 +5,9 @@ import androidx.room.Room
 import com.sangeetha.leadertask.data.local.LeaderGroupDao
 import com.sangeetha.leadertask.data.local.LeaderGroupDatabase
 import com.sangeetha.leadertask.data.remote.ApiService
-import com.sangeetha.leadertask.repository.ContactsRepository
-import com.sangeetha.leadertask.util.Constants.BASE_URL
-import com.sangeetha.leadertask.util.NetworkHelper
+import com.sangeetha.leadertask.data.remote.BASE_URL
+import com.sangeetha.leadertask.data.repository.ContactsRepository
+import com.sangeetha.leadertask.core.NetworkHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

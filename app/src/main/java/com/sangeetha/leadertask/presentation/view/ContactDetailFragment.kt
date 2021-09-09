@@ -1,22 +1,28 @@
-package com.sangeetha.leadertask.view
+package com.sangeetha.leadertask.presentation.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.sangeetha.leadertask.R
 import com.sangeetha.leadertask.data.remote.model.ContactsItem
-import com.sangeetha.leadertask.viewmodel.ContactsViewModel
 import kotlinx.android.synthetic.main.fragment_contact_detail.*
-import java.util.*
 
 class ContactDetailFragment: Fragment() {
 
-    private val viewModel: ContactsViewModel by activityViewModels()
+    private val contact: ContactsItem? by lazy {
+        requireArguments().getParcelable("ContactItem")
+    }
 
-    private lateinit var contact: ContactsItem
+    companion object {
+        fun getNewInstance(contactsItem: ContactsItem): ContactDetailFragment {
+            return ContactDetailFragment().apply {
+                arguments = bundleOf("ContactItem" to contactsItem)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +30,6 @@ class ContactDetailFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        getContactDetail()
         return View.inflate(context, R.layout.fragment_contact_detail, null)
     }
 
@@ -33,14 +38,9 @@ class ContactDetailFragment: Fragment() {
         setUpUI()
     }
 
-    private fun getContactDetail() {
-        viewModel.contactDetail.observe(requireActivity(), {
-            contact = it
-        })
-    }
-
     private fun setUpUI() {
-        contact.let {
+        require(contact != null)
+        contact?.let {
             name.text = it.name
             phoneNumber.text = it.phone
             email.text = it.email

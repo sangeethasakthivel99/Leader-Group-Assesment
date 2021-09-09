@@ -1,4 +1,4 @@
-package com.sangeetha.leadertask.view.adapter
+package com.sangeetha.leadertask.presentation.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_contact.view.*
 
 class ContactAdapter(
     private var contacts: MutableList<ContactsItem>,
-    private var itemClickListener: ItemClickListener
+    private var itemClickListener: ItemClickListener?
 ): RecyclerView.Adapter<ContactAdapter.ContactsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
@@ -30,18 +30,22 @@ class ContactAdapter(
     }
 
     class ContactsViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        fun bind(item: ContactsItem, itemClickListener: ItemClickListener) {
+        fun bind(item: ContactsItem, itemClickListener: ItemClickListener?) {
             itemView.name.text = item.name
             itemView.phoneNumber.text = item.phone
             itemView.avatarSymbol.text = item.name.first().toString()
             itemView.setOnClickListener {
-                itemClickListener.onItemClicked(item)
+                itemClickListener?.onItemClicked(item)
             }
         }
     }
 
     fun addData(list: List<ContactsItem>) {
         contacts.addAll(list)
+    }
+
+    fun onDestroy() {
+        itemClickListener = null
     }
 }
 
