@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sangeetha.leadertask.data.remote.model.ContactsItem
 import com.sangeetha.leadertask.data.repository.ContactsRepository
-import com.sangeetha.leadertask.core.NetworkHelper
 import com.sangeetha.leadertask.core.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
